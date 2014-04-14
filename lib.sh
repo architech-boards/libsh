@@ -36,7 +36,5 @@ function get_sudo_password
 function do_sudo
 {
 	CMD=$1
-	stty -echo
 	echo -e ${SUDO_PASSWORD} | sudo -S bash -c "${CMD}"
-	stty echo
 }
