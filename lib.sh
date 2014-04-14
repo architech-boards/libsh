@@ -1,9 +1,42 @@
 #!/bin/bash
 # Script library
 
+#######################################################################################################################
+# Global variables used:
+# SUDO_PASSWORD		- password of sudo
+# DEBUG_LOG_LEVEL	- debug level
 
+#######################################################################################################################
+# Defines used: error codes
 readonly ERROR_INTERNET=1
 readonly ERROR_COMMAND=2
+readonly ERROR_SPECIFIC=3
+
+#######################################################################################################################
+# INIT SCRIPT
+# set debug log level [ 0 none, 2 verbose ]
+
+while getopts "D:v" option
+do
+    case ${option} in
+	D)
+	    DEBUG_LOG_LEVEL=${OPTARG}
+	    [ ${DEBUG_LOG_LEVEL} -lt 0 ] && { DEBUG_LOG_LEVEL=0; }
+	    [ ${DEBUG_LOG_LEVEL} -gt 2 ] && { DEBUG_LOG_LEVEL=2; }
+	;;
+	*)
+	    DEBUG_LOG_LEVEL=0
+	;;
+    esac
+done
+
+#######################################################################################################################
+# return 1 if user is "architech" 0 else
+function is_architech_user
+{
+	[ "${USER}" == "architech" -a "${HOME}" == "/home/architech" ] && { return 1; }
+	return 0;
+}
 
 #######################################################################################################################
 # gets form user the sudo password and exports it
@@ -12,6 +45,13 @@ function get_sudo_password
 {
 	local ZENITY_INSTALLED
 	local SUDO_PASSWORD2
+
+	is_architech_user
+	if [ $? -eq 1 ]
+	then
+		SUDO_PASSWORD="architech"
+		return 0
+	fi
 
 	ZENITY_INSTALLED=`dpkg-query -l | grep zenity-common |& awk -F" " '{ print $1 }'`
 
@@ -64,6 +104,9 @@ function message_error
 	${ERROR_COMMAND})
 	  ERROR_MESSAGE="Error in a command, please check log file."
 	  ;;
+	${ERROR_SPECIFIC})
+	  ERROR_MESSAGE=$2
+	  ;;
 	*)
 	  ERROR_MESSAGE="Unknown error, please check log file"
 	  ;;
@@ -71,4 +114,6 @@ function message_error
 
 	echo ${ERROR_MESSAGE}
 }
+
+
 
