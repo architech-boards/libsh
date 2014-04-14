@@ -20,8 +20,8 @@ function get_sudo_password
 			echo "Please confirm sudo password: "
 			read -s SUDO_PASSWORD2
 		else
-			SUDO_PASSWORD=`zenity --password --text "Please enter sudo password: "`
-			SUDO_PASSWORD2=`zenity --password --text "Please confirm sudo password: "`
+			SUDO_PASSWORD=`zenity --password --title "Please enter sudo password"`
+			SUDO_PASSWORD2=`zenity --password --title "Please confirm sudo password"`
 		fi
 	    done
 	else
