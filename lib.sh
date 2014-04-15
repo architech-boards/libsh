@@ -30,6 +30,16 @@ do
     esac
 done
 
+###########################################################################################################
+# Will echo passed parameters only if DEBUG is set to a value. 
+# S1 debug message 
+
+debecho () {
+  if [ ${DEBUG_LOG_LEVEL} -gt 0 ]; then
+     echo "[DEBUG MESSAGE] $1" >&2
+  fi
+}
+
 #######################################################################################################################
 # return 1 if user is "architech" 0 else
 function is_architech_user
@@ -79,6 +89,22 @@ function get_sudo_password
 }
 
 #######################################################################################################################
+# Set number of CPU & parallel make.
+# param: $1 path where is located "local.conf" file
+function set_cpu_localconf
+{
+	local NR_CPUS
+	NR_CPUS=`grep -c ^processor /proc/cpuinfo`
+
+	sed -i "s|^[ \|\t]*BB_NUMBER_THREADS\(.\)*$||g" $1/local.conf
+	echo -e "BB_NUMBER_THREADS = \"${NR_CPUS}\"" >> $1/local.conf
+
+	NR_CPUS=$((NR_CPUS*2))
+	sed -i "s|^[ \|\t]*PARALLEL_MAKE\(.\)*$||g" $1/local.conf
+	echo -e "PARALLEL_MAKE = \"${NR_CPUS}\"" >> $1/local.conf
+}
+
+#######################################################################################################################
 # execute a command with sudo privileges
 # param: $1 string with the command to execute
 function do_sudo
@@ -93,6 +119,7 @@ function do_sudo
 # param: $1 error code (ERROR_INTERNET or ERROR_COMMAND)
 function message_error
 {
+	local ZENITY_INSTALLED
 	local ERROR_CODE
 	ERROR_CODE=$1
 	local ERROR_MESSAGE
@@ -112,8 +139,21 @@ function message_error
 	  ;;
 	esac
 
-	echo ${ERROR_MESSAGE}
+	ZENITY_INSTALLED=`dpkg-query -l | grep zenity-common |& awk -F" " '{ print $1 }'`
+
+	if [ "${ZENITY_INSTALLED}" != "ii" ]
+	then
+		echo ${ERROR_MESSAGE}
+	else
+		SUDO_PASSWORD=`zenity --error --text ${ERROR_MESSAGE}`
+	fi
 }
 
+###########################################################################################################
+# Quit functions
 
+function internet_error {
+    message_error ${ERROR_INTERNET}
+    exit ${ERROR_INTERNET}
+}
 
