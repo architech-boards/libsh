@@ -143,7 +143,7 @@ function message_error
 	then
 		echo ${ERROR_MESSAGE}
 	else
-		SUDO_PASSWORD=`zenity --error --text ${ERROR_MESSAGE}`
+		SUDO_PASSWORD=`zenity --error --text "${ERROR_MESSAGE}"`
 	fi
 }
 
