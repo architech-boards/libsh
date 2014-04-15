@@ -16,6 +16,7 @@ readonly ERROR_SPECIFIC=3
 # INIT SCRIPT
 # set debug log level [ 0 none, 2 verbose ]
 
+DEBUG_LOG_LEVEL=0
 while getopts "D:v" option
 do
     case ${option} in
@@ -23,9 +24,6 @@ do
 	    DEBUG_LOG_LEVEL=${OPTARG}
 	    [ ${DEBUG_LOG_LEVEL} -lt 0 ] && { DEBUG_LOG_LEVEL=0; }
 	    [ ${DEBUG_LOG_LEVEL} -gt 2 ] && { DEBUG_LOG_LEVEL=2; }
-	;;
-	*)
-	    DEBUG_LOG_LEVEL=0
 	;;
     esac
 done
