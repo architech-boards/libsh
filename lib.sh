@@ -95,11 +95,11 @@ function set_cpu_localconf
 {
 	local NR_CPUS
 	NR_CPUS=`grep -c ^processor /proc/cpuinfo`
+	NR_CPUS=$((NR_CPUS*2))
 
 	sed -i "s|^[ \|\t]*BB_NUMBER_THREADS\(.\)*$||g" $1/local.conf
 	echo -e "BB_NUMBER_THREADS = \"${NR_CPUS}\"" >> $1/local.conf
 
-	NR_CPUS=$((NR_CPUS*2))
 	sed -i "s|^[ \|\t]*PARALLEL_MAKE\(.\)*$||g" $1/local.conf
 	echo -e "PARALLEL_MAKE = \"${NR_CPUS}\"" >> $1/local.conf
 }
