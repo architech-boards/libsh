@@ -109,7 +109,7 @@ function do_sudo
 {
 	local CMD
 	CMD=$1
-	echo -e ${SUDO_PASSWORD} | sudo -S bash -c "${CMD}"
+	echo -e ${SUDO_PASSWORD} | sudo -p "" -S bash -c "${CMD}"
 }
 
 #######################################################################################################################
