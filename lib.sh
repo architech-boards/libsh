@@ -11,6 +11,7 @@
 readonly ERROR_INTERNET=1
 readonly ERROR_COMMAND=2
 readonly ERROR_SPECIFIC=3
+readonly ERROR_ABORT=4
 
 #######################################################################################################################
 # INIT SCRIPT
@@ -132,6 +133,9 @@ function message_error
 	${ERROR_SPECIFIC})
 	  ERROR_MESSAGE=$2
 	  ;;
+	${ERROR_ABORT})
+	  ERROR_MESSAGE="Process aborted. The SDK is in inconsistent state."
+	  ;;
 	*)
 	  ERROR_MESSAGE="Unknown error, please check log file"
 	  ;;
@@ -154,4 +158,15 @@ function internet_error {
     message_error ${ERROR_INTERNET}
     exit ${ERROR_INTERNET}
 }
+
+###########################################################################################################
+# Trap function
+
+function abort_process {
+    message_error ${ERROR_ABORT}
+    exit ${ERROR_ABORT}
+}
+
+trap abort_process SIGHUP SIGINT SIGTERM
+
 
