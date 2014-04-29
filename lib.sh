@@ -14,6 +14,8 @@ readonly ERROR_SPECIFIC=3
 readonly ERROR_ABORT=4
 readonly ERROR_PASSWORD=5
 
+[ "${DEBUG_LOG_LEVEL}" == "" ] && { DEBUG_LOG_LEVEL=0; }
+
 ###########################################################################################################
 # Will echo passed parameters only if DEBUG is set to a value. 
 # S1 debug message 
@@ -154,7 +156,7 @@ trap abort_process SIGHUP SIGINT SIGTERM
 # -D [0:2] set debug log level [ 0 none, 2 verbose ]; -P [password] insert sudo password
 
 function getparam() {
-    DEBUG_LOG_LEVEL=0
+    
     while getopts "D:P:" option
     do
         case ${option} in
@@ -169,4 +171,5 @@ function getparam() {
         esac
     done
 }
+
 
