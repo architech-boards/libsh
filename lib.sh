@@ -42,19 +42,14 @@ function get_sudo_password() {
 
     if [ "${ARG_PWD}" == "" ]
     then
-	    if [ "${USER}" != "architech" -o "${HOME}" != "/home/architech" ] 
-	    then
-            ZENITY_INSTALLED=`dpkg-query -l | grep zenity-common |& awk -F" " '{ print $1 }'`
-            if [ "${ZENITY_INSTALLED}" != "ii" ]
-            then
-                echo "Please enter sudo password: "
-                read -s SUDO_PASSWORD
-            else
-                SUDO_PASSWORD=`zenity --password --title "Please enter sudo password"`
-            fi
-        else
-            SUDO_PASSWORD="architech"
-        fi
+	ZENITY_INSTALLED=`dpkg-query -l | grep zenity-common |& awk -F" " '{ print $1 }'`
+	if [ "${ZENITY_INSTALLED}" != "ii" ]
+	then
+	    echo "Please enter sudo password: "
+	    read -s SUDO_PASSWORD
+	else
+	    SUDO_PASSWORD=`zenity --password --title "Please enter sudo password"`
+	fi
     else
         SUDO_PASSWORD=${ARG_PWD}
     fi
