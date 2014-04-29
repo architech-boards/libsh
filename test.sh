@@ -24,6 +24,7 @@ HOME=$HOME_TMP
 # get_sudo_password
 get_sudo_password
 echo "password inserita: ${SUDO_PASSWORD}"
+get_sudo_password "architech"
 
 # message_error
 message_error ${ERROR_INTERNET}
