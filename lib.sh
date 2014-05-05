@@ -74,7 +74,7 @@ function set_cpu_localconf() {
 	echo -e "BB_NUMBER_THREADS = \"${NR_CPUS}\"" >> $2/local.conf
 
 	sed -i "s|^[ \|\t]*PARALLEL_MAKE\(.\)*$||g" $2/local.conf
-	echo -e "PARALLEL_MAKE = \"${NR_CPUS}\"" >> $2/local.conf
+	echo -e "PARALLEL_MAKE = \"-j ${NR_CPUS}\"" >> $2/local.conf
 }
 
 #######################################################################################################################
