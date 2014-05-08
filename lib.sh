@@ -66,15 +66,15 @@ function get_sudo_password() {
 # Set number of CPU & parallel make.
 # param: $1 path where is located "local.conf" file
 function set_cpu_localconf() {
-	local NR_CPUS
-	NR_CPUS=$1
-	NR_CPUS=$((NR_CPUS*2))
+    local NR_CPUS
+    NR_CPUS=$1
+    NR_CPUS=$((NR_CPUS*2))
 
-	sed -i "s|^[ \|\t]*BB_NUMBER_THREADS\(.\)*$||g" $2/local.conf
-	echo -e "BB_NUMBER_THREADS = \"${NR_CPUS}\"" >> $2/local.conf
+    sed -i "/^[ \|\t]*BB_NUMBER_THREADS\(.\)*$/d" $2/local.conf
+    echo -e "BB_NUMBER_THREADS = \"${NR_CPUS}\"" >> $2/local.conf
 
-	sed -i "s|^[ \|\t]*PARALLEL_MAKE\(.\)*$||g" $2/local.conf
-	echo -e "PARALLEL_MAKE = \"-j ${NR_CPUS}\"" >> $2/local.conf
+    sed -i "/^[ \|\t]*PARALLEL_MAKE\(.\)*$/d" $2/local.conf
+    echo -e "PARALLEL_MAKE = \"-j ${NR_CPUS}\"" >> $2/local.conf
 }
 
 #######################################################################################################################
