@@ -134,7 +134,7 @@ function message_error() {
 function check_maintenance() {
     local STRING_MAINTENANCE
 
-    wget --timeout=5 http://downloads.architechboards.com/sdk-common/maintenance
+    wget --timeout=60 http://downloads.architechboards.com/sdk-common/maintenance
     [ $? -eq 0 ] || { rm -f maintenance; message_error ${ERROR_INTERNET}; exit 1; }
 
     if [ -e maintenance ]; then
