@@ -141,12 +141,10 @@ function check_maintenance() {
         STRING_MAINTENANCE=`grep "MESSAGE=" maintenance | awk -F"=" '{print $2}'`
         echo ${STRING_MAINTENANCE}
         rm maintenance
-        set -x
         if [ -n "${STRING_MAINTENANCE}" ]; then
             message_error ${ERROR_SPECIFIC} "${STRING_MAINTENANCE}"
             exit 1
         fi
-        set +x
     fi
 }
 
