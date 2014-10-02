@@ -134,16 +134,20 @@ function message_error() {
 function check_maintenance() {
     local STRING_MAINTENANCE
 
-    wget --timeout=60 http://downloads.architechboards.com/sdk-common/maintenance
-    [ $? -eq 0 ] || { rm -f maintenance; message_error ${ERROR_INTERNET}; exit 1; }
+    if [ -a ~/SKIP_MAINTENANCE ]; then
+        echo "!!!SKIP MAINTENANCE!!!"
+    else
+        wget --timeout=60 http://downloads.architechboards.com/sdk-common/maintenance
+        [ $? -eq 0 ] || { rm -f maintenance; message_error ${ERROR_INTERNET}; exit 1; }
 
-    if [ -e maintenance ]; then
-        STRING_MAINTENANCE=`grep "MESSAGE=" maintenance | awk -F"=" '{print $2}'`
-        echo ${STRING_MAINTENANCE}
-        rm maintenance
-        if [ -n "${STRING_MAINTENANCE}" ]; then
-            message_error ${ERROR_SPECIFIC} "${STRING_MAINTENANCE}"
-            exit 1
+        if [ -e maintenance ]; then
+            STRING_MAINTENANCE=`grep "MESSAGE=" maintenance | awk -F"=" '{print $2}'`
+            echo ${STRING_MAINTENANCE}
+            rm maintenance
+            if [ -n "${STRING_MAINTENANCE}" ]; then
+                message_error ${ERROR_SPECIFIC} "${STRING_MAINTENANCE}"
+                exit 1
+            fi
         fi
     fi
 }
