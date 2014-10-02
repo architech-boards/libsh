@@ -129,15 +129,31 @@ function message_error() {
 }
 
 #######################################################################################################################
+# Get Architech URL
+
+function get_url_download() {
+    local GET_URL_DOWNLOAD
+
+    if [ -f ~/url_download ]; then
+        GET_URL_DOWNLOAD=`head -1 ~/url_download`
+    else
+        GET_URL_DOWNLOAD="http://downloads.architechboards.com"
+    fi
+    echo "$GET_URL_DOWNLOAD"
+}
+
+#######################################################################################################################
 # Check maintenance
 
 function check_maintenance() {
     local STRING_MAINTENANCE
+    local URL_MAINTENANCE
 
     if [ -a ~/SKIP_MAINTENANCE ]; then
         echo "!!!SKIP MAINTENANCE!!!"
     else
-        wget --timeout=60 http://downloads.architechboards.com/sdk-common/maintenance
+        URL_MAINTENANCE=$(get_url_download)
+        wget --timeout=60 ${URL_MAINTENANCE}/sdk-common/maintenance
         [ $? -eq 0 ] || { rm -f maintenance; message_error ${ERROR_INTERNET}; exit 1; }
 
         if [ -e maintenance ]; then
